@@ -12,23 +12,24 @@ namespace UPnP_Port_Forwarding
                 {
                     if (args[0] == "help")
                     {
-                        Console.WriteLine("\n\nHelp:\n\n" +
-                                          "open <port> <tcp/udp>     opens port\n" +
-                                          "close <port> <tcp/udp>    closes port\n" +
-                                          "list                      list all open ports\n" +
+                        Console.WriteLine("Help:                                                      \n" +
+                                          "                                                           \n" +
+                                          "open <port> <tcp/udp>     opens port                       \n" +
+                                          "close <port> <tcp/udp>    closes port                      \n" +
+                                          "list                      list all open ports              \n" +
                                           "closeall                  tries to close all possible ports\n" +
-                                          "\n" +
-                                          "Examples:\n" +
-                                          "\n" +
-                                          "Open port 22334 on UDP:\n" +
-                                          "pf.exe open 223344 udp\n" +
-                                          "\n" +
-                                          "Close port 4825 on TCP:\n" +
-                                          "pf.exe close 4825 tcp\n" +
-                                          "\n" +
-                                          "Enjoy!\n" +
-                                          "~doEggi\n" +
-                                          "Github: https://github.com/doEggi/UPnP-Port-Forwarding");
+                                          "                                                           \n" +
+                                          "Examples:                                                  \n" +
+                                          "                                                           \n" +
+                                          "Open port 22334 on UDP:                                    \n" +
+                                          "pf.exe open 223344 udp                                     \n" +
+                                          "                                                           \n" +
+                                          "Close port 4825 on TCP:                                    \n" +
+                                          "pf.exe close 4825 tcp                                      \n" +
+                                          "                                                           \n" +
+                                          "Enjoy!                                                     \n" +
+                                          "~doEggi                                                    \n" +
+                                          "Github: https://github.com/doEggi/UPnP-Port-Forwarding       ");
                         return;
                     }
                     else if (args[0] == "list")
@@ -38,10 +39,11 @@ namespace UPnP_Port_Forwarding
                         var dev = devAsync.Result;
                         var mapsAsync = dev.GetAllMappingsAsync();
                         mapsAsync.Wait();
-                        Console.WriteLine("\n\nEvery opened port:");
+                        Console.WriteLine("Every opened port:\n");
                         foreach (Mapping map in mapsAsync.Result)
                             Console.WriteLine("Public: " + map.PublicPort + "; Private: " + map.PrivatePort + "; for device " + map.PrivateIP + "-" + map.Protocol.ToString());
-                        Console.WriteLine("Done");
+                        Console.WriteLine("\nDone");
+                        return;
                     }
                     else if(args[0] == "closeall")
                     {
@@ -50,7 +52,7 @@ namespace UPnP_Port_Forwarding
                         var dev = devAsync.Result;
                         var mapsAsync = dev.GetAllMappingsAsync();
                         mapsAsync.Wait();
-                        Console.WriteLine("\n\nStart:\n");
+                        Console.WriteLine("Start:\n");
                         foreach (Mapping map in mapsAsync.Result)
                         {
                             Task t = dev.DeletePortMapAsync(map);
@@ -61,6 +63,7 @@ namespace UPnP_Port_Forwarding
                                 Console.WriteLine("Port " + map.PublicPort + " closed!");
                         }
                         Console.WriteLine("\nFinished!");
+                        return;
                     }
                     else if(args.Length == 3)
                     {
@@ -81,7 +84,8 @@ namespace UPnP_Port_Forwarding
                                 throw new ArgumentException("The third argument has to be \"tcp\" or \"udp\"!");
                             Mapping map = new Mapping((Protocol)(a - 1), port, port);
                             dev.CreatePortMapAsync(map).Wait();
-                            Console.WriteLine("\nPort opened!");
+                            Console.WriteLine("Port opened!");
+                            return;
                         }
                         else if(args[0] == "close")
                         {
@@ -100,7 +104,8 @@ namespace UPnP_Port_Forwarding
                                 throw new ArgumentException("The third argument has to be \"tcp\" or \"udp\"!");
                             Mapping map = new Mapping((Protocol)(a - 1), port, port);
                             dev.DeletePortMapAsync(map);
-                            Console.WriteLine("\nPort closed!");
+                            Console.WriteLine("Port closed!");
+                            return;
                         }
                         else
                             throw new ArgumentException("Invalid argument or argument-structure!\nType \"pf.exe help\" to get detailed information about this...");
